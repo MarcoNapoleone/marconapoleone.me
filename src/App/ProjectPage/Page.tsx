@@ -1,24 +1,26 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
+  Avatar,
   Box, Card, CardMedia,
-  Container, Grid, Typography
+  Container, createStyles, Grid, Theme, Typography
 } from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import TopBar from "../Topbar/TopBar";
+import {ThemeContext} from "../Theme/Theme";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 800,
-    fontFamily: 'Lexend , sans-serif',
   },
   subtitle: {
     fontWeight: 400,
-    fontFamily: 'Lexend , sans-serif',
   },
   image: {
-    height: '100px',
-  }
-});
+    borderRadius: theme.shape.borderRadius,
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+  },
+}));
 
 export type PageProps = {
   title?: string,
@@ -44,17 +46,15 @@ const Page: React.FC<PageProps> = (
               <Box paddingY={16}>
                 <Grid container direction="column" spacing={2}>
                   <Grid item>
-                    <Card elevation={0}>
-                      <CardMedia className={classes.image} image={image}/>
-                    </Card>
+                    <Avatar variant="square" src={image} className={classes.image}/>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h4" className={classes.title}>
+                    <Typography variant="h3" className={classes.title}>
                       {title}
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5" className={classes.subtitle}>
+                    <Typography variant="subtitle1" className={classes.subtitle}>
                       {subtitle}
                     </Typography>
                   </Grid>

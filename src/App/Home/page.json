@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "title": "test",
-  "subtitle": "Almost before we knew it, we had left the ground.",
-  "image": "https://ibb.co/nPNctcq"
+  "title": "Random cat generator",
+  "subtitle": "This cat does not exist, an AI created it",
+  "image": "https://thiscatdoesnotexist.com/"
 }
