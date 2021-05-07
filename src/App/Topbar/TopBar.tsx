@@ -1,4 +1,4 @@
-import React, {ReactEventHandler, useContext, useEffect, useState} from 'react';
+import React ,{useContext, useEffect, useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,7 +10,7 @@ import FormatPaintIcon from '@material-ui/icons/FormatPaint';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextFormatIcon from '@material-ui/icons/TextFormat';
 import {
-  Box, Button, ButtonGroup,
+  Box, Button,
   Container,
   Divider, Fab,
   Grid,
@@ -21,14 +21,33 @@ import {
 } from "@material-ui/core";
 import {ThemeContext} from "../Theme/Theme";
 import List from '@material-ui/core/List';
-import ListItem, {ListItemProps} from '@material-ui/core/ListItem';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
+const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
+
   root: {
     flexGrow: 1,
-    //transition: 'all 0.3s ease-out',
+  },
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    backgroundColor: theme.palette.background.default,
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginRight: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
   },
   divider: {
     margin: 'auto',
@@ -37,7 +56,14 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '16%',
     borderRadius: '4px',
   },
-  searchDrawer: {
+  topDrawer: {
+    margin: 'auto',
+    borderRadius: '0 0 15px 15px',
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '40%',
+    },
+  },
+  bottomDrawer: {
     margin: 'auto',
     borderRadius: '15px 15px 0 0',
     [theme.breakpoints.up('md')]: {
@@ -94,7 +120,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.text.secondary, 0.15),
     },
-    margin: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -115,10 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SearchDrawerProps = {}
-const SearchBar: React.FC<SearchDrawerProps> = (
-  {}
-) => {
+const SearchBar = () => {
   const classes = useStyles();
   return (
     <div className={classes.search}>
@@ -126,6 +151,7 @@ const SearchBar: React.FC<SearchDrawerProps> = (
         <SearchIcon/>
       </div>
       <InputBase
+        autoFocus
         placeholder="Search…"
         classes={{
           root: classes.inputRoot,
@@ -182,12 +208,13 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
   const classes = useStyles();
   return (
     <SwipeableDrawer
-      PaperProps={{className: classes.searchDrawer,}}
-      className={classes.searchDrawer}
+      PaperProps={{className: classes.bottomDrawer,}}
+      className={classes.bottomDrawer}
       anchor="bottom"
       open={open}
       onClose={onClose}
       onOpen={onOpen}
+      disableDiscovery
     >
       <Box marginTop={1} marginBottom={2}>
         <Divider className={classes.divider}/>
@@ -209,9 +236,9 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
               </Grid>
               <Grid container alignItems="center" justify="space-evenly">
                 <Grid item>
-                  <Box color="textSecondary">
+                  <Typography color="textSecondary">
                     <TextFieldsIcon color="inherit"/>
-                  </Box>
+                  </Typography>
                 </Grid>
                 <Grid item xs={8}>
                   <Slider
@@ -232,14 +259,17 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
                 </Grid>
               </Grid>
               <Box paddingY={2}>
-                <Grid container alignItems="center" justify="center" spacing={2}>
+                <Grid container alignItems="center" justify="center" spacing={1}>
                   <Grid item xs={3}>
                     <Button
                       fullWidth
                       color={font.family === 'Lexend, sans-serif' ? 'primary' : 'default'}
                       variant="outlined"
-                      onClick={() => setFont({family:'Lexend, sans-serif'})}
-                      style={{fontFamily: 'Lexend, sans-serif', transition: 'color border 0.5s ease-out',}}
+                      onClick={() => setFont({family: 'Lexend, sans-serif'})}
+                      style={{
+                        fontFamily: 'Lexend, sans-serif',
+                        transition: 'color border 0.5s ease-out',
+                      }}
                     >
                       Default
                     </Button>
@@ -250,7 +280,10 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
                       color={font.family === 'Playfair Display, serif' ? 'primary' : 'default'}
                       variant="outlined"
                       onClick={() => setFont({family: 'Playfair Display, serif'})}
-                      style={{fontFamily: 'Playfair Display, serif', transition: 'color border 0.5s ease-out',}}
+                      style={{
+                        fontFamily: 'Playfair Display, serif',
+                        transition: 'color border 0.5s ease-out',
+                      }}
                     >
                       Serif
                     </Button>
@@ -260,8 +293,11 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
                       fullWidth
                       color={font.family === 'Roboto Mono, monospace' ? 'primary' : 'default'}
                       variant="outlined"
-                      onClick={() => setFont({family:'Roboto Mono, monospace'})}
-                      style={{fontFamily: 'Roboto Mono, monospace', transition: 'color border 0.5s ease-out',}}
+                      onClick={() => setFont({family: 'Roboto Mono, monospace'})}
+                      style={{
+                        fontFamily: 'Roboto Mono, monospace',
+                        transition: 'color border 0.5s ease-out',
+                      }}
                     >
                       Mono
                     </Button>
@@ -326,26 +362,58 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
   );
 }
 
-const TopBar = () => {
-  const [isOpenThemeDrawer, setIsOpenThemeDrawer] = useState(false);
+type SearchDrawerProps = {
+  open: boolean,
+  onClose: () => void,
+  onOpen: () => void,
+}
+const SearchDrawer: React.FC<SearchDrawerProps> = (
+  {
+    open,
+    onClose,
+    onOpen,
+  }
+) => {
+  const classes = useStyles();
+  return (
+    <SwipeableDrawer
+      PaperProps={{className: classes.topDrawer,}}
+      className={classes.topDrawer}
+      open={open}
+      onClose={onClose}
+      onOpen={onOpen}
+      anchor="top"
+      disableDiscovery
+    >
+      <SearchBar/>
+      <Box marginTop={1} marginBottom={1}>
+        <Divider className={classes.divider}/>
+      </Box>
+    </SwipeableDrawer>
+  );
+}
+
+const TopBar: React.FC = ({children}) => {
+  const [isOpenTheme, setIsOpenTheme] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.toolbar}>
+      <AppBar>
         <Toolbar className={classes.toolbar}>
-          <Grid container justify="flex-end">
+          <Grid container justify="flex-end" spacing={2}>
             <Grid item>
-              <Tooltip TransitionComponent={Zoom} title="Search" arrow>
-                <IconButton onClick={() => setIsOpenSearch(true)}>
-                  <SearchIcon/>
+              <Tooltip TransitionComponent={Zoom} title="Page theme" arrow>
+                <IconButton onClick={() => setIsOpenTheme(true)}>
+                  <TextFieldsIcon/>
                 </IconButton>
               </Tooltip>
             </Grid>
             <Grid item>
-              <Tooltip TransitionComponent={Zoom} title="Page theme" arrow>
-                <IconButton onClick={() => setIsOpenThemeDrawer(true)}>
-                  <TextFieldsIcon/>
+              <Tooltip TransitionComponent={Zoom} title="Search" arrow>
+                <IconButton
+                  onClick={() => setIsOpenSearch(true)}>
+                  <SearchIcon/>
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -353,21 +421,19 @@ const TopBar = () => {
         </Toolbar>
       </AppBar>
       <ThemeDrawer
-        open={isOpenThemeDrawer}
-        onClose={() => setIsOpenThemeDrawer(false)}
-        onOpen={() => setIsOpenThemeDrawer(true)}
+        open={isOpenTheme}
+        onClose={() => setIsOpenTheme(false)}
+        onOpen={() => setIsOpenTheme(true)}
       />
-      <SwipeableDrawer
+      <SearchDrawer
         open={isOpenSearch}
         onClose={() => setIsOpenSearch(false)}
         onOpen={() => setIsOpenSearch(true)}
-        anchor="left"
-        variant="persistent"
-      >
-        <SearchBar/>
-      </SwipeableDrawer>
+      />
+      {children}
     </div>
   );
 }
+
 
 export default TopBar;

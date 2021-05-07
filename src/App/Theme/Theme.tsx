@@ -1,8 +1,8 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import {ThemeProvider} from 'styled-components';
 import NoSsr from '@material-ui/core/NoSsr';
-import {CssBaseline, PaletteType, ThemeProvider as MuiThemeProvider} from '@material-ui/core';
+import {CssBaseline, ThemeProvider as MuiThemeProvider} from '@material-ui/core';
 import {deepOrange, deepPurple, lightBlue, orange} from "@material-ui/core/colors";
 
 type FontType = {
