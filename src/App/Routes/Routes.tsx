@@ -4,8 +4,8 @@ import {
 } from 'react-router-dom';
 import React, {useEffect} from 'react';
 import Theme from "../Theme/Theme";
-import Home from "../Home/Home";
 import {authenticateAnonymously} from "../../services/firestore";
+import Home from "./Public/Home/Home";
 
 const Routes: React.FC = () => {
   useEffect(() => {

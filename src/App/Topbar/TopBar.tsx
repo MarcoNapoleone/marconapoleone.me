@@ -1,4 +1,4 @@
-import React ,{useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +14,9 @@ import {
   Container,
   Divider, Fab,
   Grid,
-  ListItemSecondaryAction, Slider,
+  ListItemSecondaryAction, Slide, Slider,
   SwipeableDrawer, Switch,
-  Tooltip,
+  Tooltip, useScrollTrigger,
   Zoom
 } from "@material-ui/core";
 import {ThemeContext} from "../Theme/Theme";
@@ -215,6 +215,7 @@ const ThemeDrawer: React.FC<ThemeDrawerProps> = (
       onClose={onClose}
       onOpen={onOpen}
       disableDiscovery
+      disableSwipeToOpen
     >
       <Box marginTop={1} marginBottom={2}>
         <Divider className={classes.divider}/>
@@ -384,6 +385,7 @@ const SearchDrawer: React.FC<SearchDrawerProps> = (
       onOpen={onOpen}
       anchor="top"
       disableDiscovery
+      disableSwipeToOpen
     >
       <SearchBar/>
       <Box marginTop={1} marginBottom={1}>
@@ -393,33 +395,47 @@ const SearchDrawer: React.FC<SearchDrawerProps> = (
   );
 }
 
+
 const TopBar: React.FC = ({children}) => {
+  const trigger = useScrollTrigger();
   const [isOpenTheme, setIsOpenTheme] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar>
-        <Toolbar className={classes.toolbar}>
-          <Grid container justify="flex-end" spacing={2}>
-            <Grid item>
-              <Tooltip TransitionComponent={Zoom} title="Page theme" arrow>
-                <IconButton onClick={() => setIsOpenTheme(true)}>
-                  <TextFieldsIcon/>
-                </IconButton>
-              </Tooltip>
+      <Slide appear={false} direction="down" in={!trigger}>
+        <AppBar>
+          <Toolbar className={classes.toolbar}>
+            <Grid container justify="space-between" alignItems="center">
+              <Grid item>
+                <Typography variant="h6">
+                  <Logo/>
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container justify="flex-end" spacing={2}>
+                  <Grid item>
+                    <Tooltip TransitionComponent={Zoom} title="Page theme" arrow>
+                      <IconButton onClick={() => setIsOpenTheme(true)}>
+                        <TextFieldsIcon/>
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item>
+                    <Tooltip TransitionComponent={Zoom} title="Search" arrow>
+                      <IconButton
+                        onClick={() => setIsOpenSearch(true)}>
+                        <SearchIcon/>
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Tooltip TransitionComponent={Zoom} title="Search" arrow>
-                <IconButton
-                  onClick={() => setIsOpenSearch(true)}>
-                  <SearchIcon/>
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
+      </Slide>
+      <Toolbar/>
       <ThemeDrawer
         open={isOpenTheme}
         onClose={() => setIsOpenTheme(false)}
@@ -435,5 +451,17 @@ const TopBar: React.FC = ({children}) => {
   );
 }
 
+const Logo = () => {
+  return (
+    <svg style={{marginTop: '7px'}} width="50" height="50" viewBox='0 0 177 100' fill='none'
+         xmlns='http://www.w3.org/2000/svg'>
+      <circle cx='72' cy='50' r='30' fill='#68DBFF'/>
+      <ellipse cx='104.647' cy='50' rx='29.7059' ry='30' fill='#FF7917'/>
+      <path fill-rule='evenodd' clip-rule='evenodd'
+            d='M88.4039 75.1221C96.5911 69.7652 102 60.5143 102 50C102 39.4858 96.5911 30.2348 88.4039 24.878C80.2971 30.2348 74.9412 39.4858 74.9412 50C74.9412 60.5143 80.2971 69.7652 88.4039 75.1221Z'
+            fill='#5D2C02'/>
+    </svg>
+  );
+}
 
 export default TopBar;
