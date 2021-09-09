@@ -12,9 +12,9 @@ const MathComponent: React.FC<MathComponentProps> = (
 ) => {
   return (
     <Box paddingY={1}>
-      <Grid container>
+      <Grid container justify="center" alignItems="center">
         <Grid item>
-          <Latex displayMode={true}>{'$' + content + '$'}</Latex>
+          <Latex displayMode={true}>{'$' + content.replaceAll("/","\\") + '$'}</Latex>
         </Grid>
       </Grid>
     </Box>);

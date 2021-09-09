@@ -7,19 +7,18 @@ const Home = () => {
   const [page, setPage] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const fetchPages = () => {
-    db.collection('pages')
+  const fetchPages = async () => {
+   return db.collection('pages')
       .doc((location.pathname).replace('/', ''))
       .get()
-      .then((doc) => {
+      .then((doc) =>  {
         setPage(doc.data());
-      })
-      .finally(() => {
-        setLoading(false)
       });
   }
   useEffect(() => {
-    fetchPages();
+    fetchPages()
+        .then(()=> {setLoading(false)})
+        .catch((err) =>  { console.log("ERROR: " + err)})
   }, []);
   return (
     <Page
